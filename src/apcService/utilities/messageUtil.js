@@ -23,7 +23,7 @@ const mongodbHandler = (message) => {
   }
 
   logger.info(`enter mongodb handler`);
-
+g
 };
 
 
