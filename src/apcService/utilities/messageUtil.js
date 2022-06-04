@@ -17,6 +17,17 @@ const natsMessageHandler = (message) => {
   }
 };
 
+const mongodbHandler = (message) => {
+  if (!global.cache) {
+    return;
+  }
+
+  logger.info(`enter mongodb handler`);
+
+};
+
+
 module.exports = {
   natsMessageHandler,
+  mongodbHandler,
 };
