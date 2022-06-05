@@ -12,6 +12,8 @@ const measureService = require('./measureService');
 const apcService = require('./apcService');
 const paramsService = require('./paramsService');
 
+const db = require('./utilities/db');
+
 let measureHandle = null;
 let paramsHandle = null;
 
@@ -50,6 +52,9 @@ const initGlobalCache = async () => {
 };
 
 const run = async () => {
+  // connect to mongodb
+  db.connect();
+
   // initialize the global resource
   await initGlobalNATSClient();
   await initGlobalCache();
@@ -63,6 +68,9 @@ const run = async () => {
 run();
 
 process.on('SIGINT', async () => {
+  // disconnect with mongodb
+  db.disconnect();
+
   if (global.cache) {
     await global.cache.close();
     global.cache = null;
