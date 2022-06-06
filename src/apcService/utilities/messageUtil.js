@@ -1,4 +1,5 @@
 const logger = require('../../utilities/logger')('APC_SERVICE');
+
 const db = require('../../utilities/db');
 
 const natsMessageHandler = (message) => {

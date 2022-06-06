@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { defaultStrategy, sharonStrategy } = require('../../utilities/strategyUtil');
+const { defaultStrategy, sharonStrategy, ribeyesStrategy, stripStrategy } = require('../../utilities/strategyUtil');
 
 const logger = require('../../../utilities/logger')('APC_SERVICE');
 
@@ -19,9 +19,17 @@ router.post('/api/v1/process', async (req, res) => {
   });
 
   try {
+    // if (!db.existsSync('../../../utilities/db')) {
+    //   logger.info('MongoDB not exist!');
+    //   return;
+    // }
+    if (db != null) {
+      logger.info('MongoDB not exist!');
+      return;
+    }
     const factors = db.getCollection('factors');
     if (!factors) {
-      throw new Error('the global cache is not existed');
+      throw new Error('the db factors is not existed');
     }
     const tFactor = factors.get('FACTOR_THICKNESS');
     const mFactor = factors.get('FACTOR_MOISTURE');
@@ -29,6 +37,10 @@ router.post('/api/v1/process', async (req, res) => {
     let data = null;
     if (type === 'SHARON') {
       data = sharonStrategy(thickness, tFactor);
+    } else if (type === 'RIB_EYE') {
+      data = ribeyeStrategy(thickness, tFactor);
+    } else if (type === 'STRIP') {
+      data = stripStrategy(thickness, tFactor);
     } else {
       data = defaultStrategy(moisture, mFactor);
     }
